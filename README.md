@@ -88,9 +88,13 @@ Wheeled mobile base for true "following robot" behavior
 👥 Team Members (Capstone Group)
 
 Brahmpreet Singh – Team Lead & System Architect
+
 Sagnik Mukherjee – AI & Motion Intelligence
+
 Jaspinder Singh – Hardware & Integration
+
 Sukhjot Singh – Prototyping & Deployment
+
 Prathamjit Singh – Documentation & Research
 
 Project Guide: Dr. Debabrata Ghosh and Dr. Shashikant	
