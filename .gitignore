@@ -1,0 +1,25 @@
+﻿# Python / project
+venv/
+env/
+.venv/
+__pycache__/
+*.py[cod]
+*.pyo
+*.pyd
+*.egg-info/
+dist/
+build/
+
+# Editor / OS
+.vscode/
+.idea/
+*.swp
+.DS_Store
+Thumbs.db
+
+# Virtualenv / pip
+pip-log.txt
+pip-delete-this-directory.txt
+
+# OneDrive temp
+~$*
