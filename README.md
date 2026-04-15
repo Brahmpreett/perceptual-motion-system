@@ -47,5 +47,5 @@ A robust embedded computer vision project that detects human presence in real ti
 
 1. Clone the repository:
    ```bash
-   git clone https://github.com/yourusername/perceptual-motion-system.git
+   git clone https://github.com/Brahmpreett/perceptual-motion-system.git
    cd perceptual-motion-system
