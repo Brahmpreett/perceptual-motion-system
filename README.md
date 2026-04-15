@@ -49,3 +49,51 @@ A robust embedded computer vision project that detects human presence in real ti
    ```bash
    git clone https://github.com/Brahmpreett/perceptual-motion-system.git
    cd perceptual-motion-system
+2. Create and activate virtual environment:Bashpython -m venv venv
+    venv\Scripts\activate     # Windows
+   # source venv/bin/activate # macOS/Linux
+3. Install dependencies:Bashpip install -r requirements.txt
+4. Download model files into models/ folder:
+   deploy.prototxt
+   mobilenet_iter_73000.caffemodel
+
+5. Run the system:Bashpython src/main.py
+
+Press q to quit. Move in front of the camera and watch the system track you intelligently!
+📁 Project Structure
+textperceptual-motion-system/
+├── src/
+│   ├── main.py                 # Main application loop
+│   ├── vision/
+│   │   └── detector.py         # Person detection logic
+│   ├── control/
+│   │   ├── pid.py              # PID controller
+│   │   └── servo_simulator.py  # Visual pan-tilt simulation
+│   └── utils/
+│       └── config.py           # All tunable parameters
+├── models/                     # MobileNet-SSD model files
+├── data/recordings/            # Auto-generated videos
+├── hardware/                   # Wiring notes & Pi deployment
+├── docs/                       # Architecture & reports
+└── README.md
+🔮 Future Enhancements (Phase 2)
+
+Kalman Filter for motion prediction (even smoother tracking)
+Text overlays on recorded video (angles, FPS, timestamps)
+Raspberry Pi deployment with real servo control via GPIO
+Telegram alerts on motion detection
+Gesture recognition using MediaPipe
+Wheeled mobile base for true "following robot" behavior
+
+👥 Team Members (Capstone Group)
+
+Brahmpreet Singh – Team Lead & System Architect
+Sagnik Mukherjee – AI & Motion Intelligence
+Jaspinder Singh – Hardware & Integration
+Sukhjot Singh – Prototyping & Deployment
+Prathamjit Singh – Documentation & Research
+
+Project Guide: Dr. Debabrata Ghosh and Dr. Shashikant	
+
+Built with passion for intelligent systems
+Perceptual Motion System – Making machines perceive and respond to human motion intelligently
