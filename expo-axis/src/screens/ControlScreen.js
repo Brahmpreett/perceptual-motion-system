@@ -200,8 +200,8 @@ export default function ControlScreen({ onOpenConnection, onOpenSettings }) {
               <Text className="text-xs text-slate-500">Placeholder</Text>
             </View>
             <View className="items-center justify-center py-8">
-              <View className="h-20 w-32 rounded-2xl border border-cyan-500/30 bg-axis-panel">
-                <View className="m-auto h-8 w-8 rounded-full border-2 border-cyan-400" />
+              <View className="h-20 w-32 items-center justify-center rounded-2xl border border-cyan-500/30 bg-axis-panel">
+                <View className="h-8 w-8 rounded-full border-2 border-cyan-400" />
               </View>
               <Text className="mt-4 text-center text-sm text-slate-500">
                 Stream preview surface for the Raspberry Pi camera

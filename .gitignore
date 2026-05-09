@@ -2,6 +2,8 @@
 venv/
 env/
 .venv/
+node_modules/
+expo-axis/node_modules/
 __pycache__/
 *.py[cod]
 *.pyo
@@ -13,6 +15,8 @@ build/
 # Editor / OS
 .vscode/
 .idea/
+.expo/
+.expo-export-check/
 *.swp
 .DS_Store
 Thumbs.db

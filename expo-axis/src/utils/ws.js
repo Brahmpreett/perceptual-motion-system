@@ -129,6 +129,8 @@ export function closeRobotConnection() {
   manualClose = true;
   clearReconnectTimer();
   if (socket) {
+    socket.onclose = null;
+    socket.onerror = null;
     socket.close();
     socket = null;
   }

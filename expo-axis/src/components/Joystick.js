@@ -56,7 +56,7 @@ export default function Joystick({
 
   return (
     <View className="items-center">
-      <Text className="mb-2 text-xs font-semibold uppercase tracking-widest text-slate-400">
+      <Text className="mb-2 text-xs font-semibold uppercase text-slate-400">
         {label}
       </Text>
       <View
