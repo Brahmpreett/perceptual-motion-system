@@ -1,0 +1,10 @@
+{
+  "expo": {
+    "name": "AXIS",
+    "slug": "expo-axis",
+    "version": "0.1.0",
+    "orientation": "portrait",
+    "userInterfaceStyle": "dark",
+    "assetBundlePatterns": ["**/*"]
+  }
+}
