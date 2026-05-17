@@ -1,0 +1,129 @@
+@import "tailwindcss" source(none);
+@source "../src";
+@import "tw-animate-css";
+
+@custom-variant dark (&:is(.dark *));
+
+/*
+ * AXIS // ROBOTICS CONTROL — stealth cockpit theme.
+ * Cold white accent, deep red alert. No neon, no glow.
+ */
+
+@theme inline {
+  --radius-sm: 2px;
+  --radius-md: 3px;
+  --radius-lg: 4px;
+  --radius-xl: 6px;
+  --color-background: var(--background);
+  --color-foreground: var(--foreground);
+  --color-card: var(--card);
+  --color-card-foreground: var(--card-foreground);
+  --color-popover: var(--popover);
+  --color-popover-foreground: var(--popover-foreground);
+  --color-primary: var(--primary);
+  --color-primary-foreground: var(--primary-foreground);
+  --color-secondary: var(--secondary);
+  --color-secondary-foreground: var(--secondary-foreground);
+  --color-muted: var(--muted);
+  --color-muted-foreground: var(--muted-foreground);
+  --color-accent: var(--accent);
+  --color-accent-foreground: var(--accent-foreground);
+  --color-destructive: var(--destructive);
+  --color-destructive-foreground: var(--destructive-foreground);
+  --color-border: var(--border);
+  --color-input: var(--input);
+  --color-ring: var(--ring);
+  --color-alert: var(--alert);
+  --color-alert-foreground: var(--alert-foreground);
+  --color-grid: var(--grid);
+  --font-mono: "Share Tech Mono", "Courier Prime", ui-monospace, monospace;
+}
+
+:root,
+.dark {
+  --background: oklch(0 0 0);                  /* #000000 */
+  --foreground: oklch(0.92 0 0);               /* #E8E8E8 cold white */
+  --card: oklch(0.16 0 0);                     /* #121212 */
+  --card-foreground: oklch(0.92 0 0);
+  --popover: oklch(0.16 0 0);
+  --popover-foreground: oklch(0.92 0 0);
+  --primary: oklch(0.92 0 0);                  /* cold white */
+  --primary-foreground: oklch(0 0 0);
+  --secondary: oklch(0.22 0 0);
+  --secondary-foreground: oklch(0.92 0 0);
+  --muted: oklch(0.20 0 0);
+  --muted-foreground: oklch(0.62 0 0);
+  --accent: oklch(0.92 0 0);
+  --accent-foreground: oklch(0 0 0);
+  --destructive: oklch(0.52 0.18 25);          /* #C0392B deep red */
+  --destructive-foreground: oklch(0.96 0 0);
+  --alert: oklch(0.52 0.18 25);
+  --alert-foreground: oklch(0.96 0 0);
+  --border: oklch(0.30 0 0 / 60%);
+  --input: oklch(0.25 0 0);
+  --ring: oklch(0.92 0 0 / 50%);
+  --grid: oklch(0.92 0 0 / 6%);
+  --radius: 3px;
+}
+
+@layer base {
+  * {
+    border-color: var(--color-border);
+  }
+  html, body {
+    background-color: var(--color-background);
+    color: var(--color-foreground);
+    font-family: var(--font-mono);
+    letter-spacing: 0.02em;
+  }
+  body {
+    background-image:
+      linear-gradient(to right, var(--color-grid) 1px, transparent 1px),
+      linear-gradient(to bottom, var(--color-grid) 1px, transparent 1px);
+    background-size: 48px 48px;
+  }
+}
+
+@layer utilities {
+  .panel {
+    background-color: color-mix(in oklab, var(--card) 80%, transparent);
+    border: 1px solid var(--border);
+    backdrop-filter: blur(6px);
+  }
+  .panel-label {
+    font-size: 10px;
+    letter-spacing: 0.25em;
+    color: var(--muted-foreground);
+    text-transform: uppercase;
+  }
+  .scanline::after {
+    content: "";
+    position: absolute;
+    inset: 0;
+    background: repeating-linear-gradient(
+      to bottom,
+      transparent 0,
+      transparent 3px,
+      rgba(255, 255, 255, 0.02) 3px,
+      rgba(255, 255, 255, 0.02) 4px
+    );
+    pointer-events: none;
+  }
+  @keyframes axis-pulse {
+    0%, 100% { opacity: 1; }
+    50% { opacity: 0.45; }
+  }
+  .pulse-dot { animation: axis-pulse 1.4s ease-in-out infinite; }
+  @keyframes axis-blink {
+    0%, 49% { opacity: 1; }
+    50%, 100% { opacity: 0; }
+  }
+  .blink { animation: axis-blink 1s steps(1) infinite; }
+  @keyframes axis-fade-in {
+    from { opacity: 0; transform: translateY(6px); }
+    to { opacity: 1; transform: translateY(0); }
+  }
+  .fade-in { animation: axis-fade-in 0.4s ease-out both; }
+  .press-scale { transition: transform 80ms ease-out; }
+  .press-scale:active { transform: scale(0.96); }
+}
