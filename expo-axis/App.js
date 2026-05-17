@@ -1,3 +1,4 @@
+import './global.css';
 import React, { useEffect, useState } from 'react';
 import { StatusBar, View } from 'react-native';
 import Toast from 'react-native-toast-message';
