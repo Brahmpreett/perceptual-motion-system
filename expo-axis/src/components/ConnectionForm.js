@@ -1,5 +1,6 @@
 import React, { useEffect, useMemo, useState } from 'react';
 import { Pressable, StyleSheet, Text, TextInput, View } from 'react-native';
+import Animated, { FadeInDown, FadeInUp, Layout } from 'react-native-reanimated';
 import useStore from '../store/useStore';
 import { closeRobotConnection, connectDemo, connectRobot } from '../utils/ws';
 
@@ -29,8 +30,8 @@ export default function ConnectionForm() {
   };
 
   return (
-    <View style={styles.wrap}>
-      <View style={styles.hero}>
+    <Animated.View style={styles.wrap} entering={FadeInDown.duration(600).springify()}>
+      <Animated.View style={styles.hero} entering={FadeInDown.delay(100).duration(600).springify()}>
         <View style={styles.brandRow}>
           <View style={styles.logoMark} />
           <View>
@@ -41,9 +42,9 @@ export default function ConnectionForm() {
         <Text style={styles.helper}>
           No hardware yet? Use Demo Mode to preview the full controller UI and test buttons.
         </Text>
-      </View>
+      </Animated.View>
 
-      <View style={styles.card}>
+      <Animated.View style={styles.card} entering={FadeInUp.delay(200).duration(600).springify()} layout={Layout.springify()}>
         <View style={styles.cardHeader}>
           <View>
             <Text style={styles.label}>Robot WebSocket</Text>
@@ -81,7 +82,11 @@ export default function ConnectionForm() {
           style={styles.input}
         />
 
-        {connectionError ? <Text style={styles.error}>{connectionError}</Text> : null}
+        {connectionError ? (
+          <Animated.Text entering={FadeInDown.springify()} style={styles.error}>
+            {connectionError}
+          </Animated.Text>
+        ) : null}
 
         <View style={styles.actions}>
           <Pressable
@@ -90,7 +95,7 @@ export default function ConnectionForm() {
             style={({ pressed }) => [
               styles.primaryBtn,
               (connected && !demoMode) ? styles.primaryBtnMuted : null,
-              pressed ? { transform: [{ scale: 0.99 }], opacity: 0.95 } : null,
+              pressed ? { transform: [{ scale: 0.97 }], opacity: 0.95 } : null,
               connecting || reconnecting ? { opacity: 0.6 } : null,
             ]}
           >
@@ -111,7 +116,7 @@ export default function ConnectionForm() {
             onPress={() => connectDemo(localIp)}
             style={({ pressed }) => [
               styles.secondaryBtn,
-              pressed ? { transform: [{ scale: 0.99 }], opacity: 0.95 } : null,
+              pressed ? { transform: [{ scale: 0.97 }], opacity: 0.95 } : null,
             ]}
           >
             <Text style={styles.secondaryBtnText}>Demo Mode</Text>
@@ -122,8 +127,8 @@ export default function ConnectionForm() {
           Tip: On restricted Wi‑Fi, Expo Go may fail to load updates. Demo Mode avoids hardware but still
           needs the app bundle to load.
         </Text>
-      </View>
-    </View>
+      </Animated.View>
+    </Animated.View>
   );
 }
 

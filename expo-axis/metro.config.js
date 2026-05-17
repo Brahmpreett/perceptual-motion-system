@@ -7,4 +7,14 @@ config.resolver.blockList = [
   /node_modules\/@react-native\/debugger-frontend\/.*/,
 ];
 
-module.exports = withNativeWind(config, { input: './global.css' });
+// Force Metro to prefer CJS builds over ESM.
+// Zustand v4's ESM bundle contains `import.meta.env` which is a SyntaxError
+// in Metro's classic-script bundle (not type="module"), causing a white screen.
+config.resolver.resolverMainFields = [
+  'react-native',
+  'browser',
+  'require',
+  'main',
+];
+
+module.exports = withNativeWind(config, { input: './global.css' });
