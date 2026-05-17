@@ -14,6 +14,7 @@ const useStore = create((set) => ({
   sensitivity: 0.7,
   recording: false,
   transformMode: 'folded',
+  demoMode: false,
 
   setIP: (ip) => set({ ip }),
   setWS: (ws) => set({ ws }),
@@ -28,6 +29,7 @@ const useStore = create((set) => ({
   setSensitivity: (sensitivity) => set({ sensitivity }),
   setRecording: (recording) => set({ recording }),
   setTransformMode: (transformMode) => set({ transformMode }),
+  setDemoMode: (demoMode) => set({ demoMode }),
 }));
 
 export default useStore;

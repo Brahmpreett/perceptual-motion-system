@@ -125,6 +125,16 @@ export function connectRobot(ip, options = {}) {
   return socket;
 }
 
+export function connectDemo() {
+  const store = useStore.getState();
+  store.setDemoMode(true);
+  store.setConnected(true);
+  store.setConnecting(false);
+  store.setReconnecting(false);
+  store.setConnectionError('');
+  Toast.show({ type: 'success', text1: 'Demo Mode active', text2: 'Controls are simulated' });
+}
+
 export function closeRobotConnection() {
   manualClose = true;
   clearReconnectTimer();
@@ -139,6 +149,7 @@ export function closeRobotConnection() {
   store.setConnected(false);
   store.setConnecting(false);
   store.setReconnecting(false);
+  store.setDemoMode(false);
 }
 
 export function sendCommand(command, options = {}) {

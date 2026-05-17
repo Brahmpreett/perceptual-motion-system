@@ -9,6 +9,7 @@ module.exports = {
     extend: {
       colors: {
         'axis-bg': '#050814',
+        'axis-panel': '#0b1220',
       },
     },
   },
