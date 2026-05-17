@@ -1,48 +1,35 @@
-from fastapi import FastAPI, WebSocket, WebSocketDisconnect
-from src.brain.interpreter import interpret
-import json
+import json 
+import logging 
 
-app = FastAPI()
+from fastapi 
+import FastAPI, WebSocket, WebSocketDisconnect 
+from fastapi.middleware.cors import CORSMiddleware 
 
-VALID_ACTIONS = [
-    "move", "stop", "rotate", "transform",
-    "camera", "record", "status", "emergency_stop"
-]
+logging.basicConfig(level=logging.INFO, format="%(levelname)s: %(message)s") 
+logger = logging.getLogger(__name__) 
 
-def validate_command(data: dict) -> dict:
-    if "action" not in data:
-        return {"error": "missing action field"}
-    if data["action"] not in VALID_ACTIONS:
-        return {"error": f"unknown action: {data['action']}"}
-    return {"status": "ok", "received": data}
 
-@app.websocket("/ws")
-async def websocket_endpoint(websocket: WebSocket):
-    await websocket.accept()
-    print("App connected")
-    try:
-        while True:
-            raw = await websocket.receive_text()
-            print(f"Received: {raw}")
+app = FastAPI(title="AXIS Robot Server") 
 
-            try:
-                data = json.loads(raw)
-
-                if "nlp" in data:
-                    print(f"NLP command: {data['nlp']}")
-                    command = interpret(data["nlp"])
-                    print(f"Brain output: {command}")
-                    response = validate_command(command)
-                    response["nlp_input"] = data["nlp"]
-                    response["interpreted"] = command
-                else:
-                    response = validate_command(data)
-
-            except json.JSONDecodeError:
-                response = {"error": "invalid JSON"}
-
-            await websocket.send_text(json.dumps(response))
-            print(f"Sent: {response}")
-
-    except WebSocketDisconnect:
-        print("App disconnected")
+app.add_middleware( 
+	CORSMiddleware, 
+	allow_origins=["*"], 
+	allow_credentials=True, 
+	allow_methods=["*"], 
+	allow_headers=["*"], 
+) 
+@app.get("/health") 
+async def health(): 
+	return {"status": "ok"} 
+@app.websocket("/ws") 
+async def websocket_endpoint(websocket: WebSocket): 
+	await websocket.accept() 
+	logger.info("WebSocket client connected") 
+	try: while True: raw = await websocket.receive_text() 
+	try: 
+		payload = json.loads(raw) 
+	except json.JSONDecodeError: 
+		payload = {"raw": raw} 
+	logger.info("WS command: %s", payload) 
+	await websocket.send_json({"status": "ok", "command": payload}) 
+	except WebSocketDisconnect: logger.info("WebSocket client disconnected")
