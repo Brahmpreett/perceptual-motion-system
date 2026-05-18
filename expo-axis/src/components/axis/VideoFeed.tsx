@@ -2,16 +2,20 @@ import { useEffect, useState } from "react";
 
 interface Props {
   ip: string;
+  autoMode?: boolean;
+  onToggleAuto?: () => void;
+  cameraPower?: boolean;
+  onToggleCamera?: () => void;
 }
 
-export function VideoFeed({ ip }: Props) {
+export function VideoFeed({ ip, autoMode = false, onToggleAuto, cameraPower = true, onToggleCamera }: Props) {
   const [tick, setTick] = useState(0);
   useEffect(() => {
     const id = setInterval(() => setTick((t) => t + 1), 1000);
     return () => clearInterval(id);
   }, []);
 
-  const src = ip ? `http://${ip}/stream` : "";
+  const src = ip ? `http://${ip}:8000/video_feed` : "";
 
   return (
     <section
@@ -19,16 +23,20 @@ export function VideoFeed({ ip }: Props) {
       aria-label="Camera feed"
     >
       {/* Stream */}
-      <div className="absolute inset-0 bg-black">
-        {src ? (
+      <div className="absolute inset-0 bg-black flex items-center justify-center">
+        {src && cameraPower ? (
           <img
             src={src}
             alt="Robot camera feed"
-            className="h-full w-full object-cover opacity-90"
+            className="h-full w-full object-contain opacity-90"
             onError={(e) => {
               (e.currentTarget as HTMLImageElement).style.visibility = "hidden";
             }}
           />
+        ) : !cameraPower ? (
+          <div className="text-alert tracking-[0.5em] text-sm font-mono uppercase">
+            CAMERA OFFLINE
+          </div>
         ) : null}
       </div>
 
@@ -63,9 +71,36 @@ export function VideoFeed({ ip }: Props) {
       </div>
 
       {/* HUD telemetry */}
-      <div className="absolute left-4 top-4 flex flex-col gap-1 text-[11px] tracking-[0.2em] text-muted-foreground">
+      <div className="absolute left-4 top-4 flex flex-col gap-1 text-[11px] tracking-[0.2em] text-muted-foreground z-10">
         <span>CAM-01 / 1080p</span>
         <span>FOV 78°</span>
+        <div className="flex flex-col gap-2 mt-2 items-start">
+          <button 
+            onClick={onToggleCamera}
+            className="press-scale px-3 py-1.5 text-[10px] uppercase border"
+            style={{ 
+              color: cameraPower ? "var(--foreground)" : "var(--alert)",
+              backgroundColor: "transparent",
+              borderColor: cameraPower ? "var(--foreground)" : "var(--alert)"
+            }}
+          >
+            {cameraPower ? "CAM: ON" : "CAM: OFF"}
+          </button>
+
+          {cameraPower && (
+            <button 
+              onClick={onToggleAuto}
+              className="press-scale px-3 py-1.5 text-[10px] uppercase border"
+              style={{ 
+                color: autoMode ? "var(--background)" : "var(--foreground)",
+                backgroundColor: autoMode ? "var(--foreground)" : "transparent",
+                borderColor: "var(--foreground)"
+              }}
+            >
+              {autoMode ? "AUTO-TRACK: ON" : "AUTO-TRACK: OFF"}
+            </button>
+          )}
+        </div>
       </div>
       <div className="absolute bottom-3 left-1/2 -translate-x-1/2 text-[10px] tracking-[0.35em] text-muted-foreground">
         T+{String(tick).padStart(5, "0")}

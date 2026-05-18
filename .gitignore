@@ -1,4 +1,4 @@
-﻿# Python / project
+﻿# --- Project / Build ---
 venv/
 env/
 .venv/
@@ -12,23 +12,40 @@ __pycache__/
 dist/
 build/
 
-# Editor / OS
+# --- Environment ---
+.env
+.env.*
+
+# --- Logs ---
+*.log
+expo-axis/expo-runtime.log
+expo-axis/*.log
+
+# --- Editor / IDE ---
 .vscode/
 .idea/
 .expo/
 .expo-export-check/
 *.swp
+
+# --- OS / System ---
 .DS_Store
 Thumbs.db
+~$*
 
-# Virtualenv / pip
+# --- Virtualenv / Pip ---
 pip-log.txt
 pip-delete-this-directory.txt
 
-# OneDrive temp
-~$*
-*.log. e n v 
- 
- e x p o - a x i s / e x p o - r u n t i m e . l o g 
- 
- expo-axis/*.log
+# --- Lock files ---
+package-lock.json
+expo-axis/package-lock.json
+
+# --- TypeScript build info ---
+*.tsbuildinfo
+
+# --- ML models / large binaries ---
+*.pt
+*.h5
+*.onnx
+*.ckpt

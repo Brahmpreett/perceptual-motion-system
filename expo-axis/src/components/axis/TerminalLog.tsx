@@ -5,6 +5,7 @@ export interface LogEntry {
   ts: number;
   payload: string;
   ok: boolean;
+  type: "TX" | "RX" | "AUTO_RX";
 }
 
 interface Props {
@@ -30,7 +31,7 @@ export function TerminalLog({ entries }: Props) {
   return (
     <div className="panel fade-in flex flex-col" style={{ height: 160 }}>
       <div className="flex items-center justify-between px-3 py-1.5" style={{ borderBottom: "1px solid var(--border)" }}>
-        <span className="panel-label">TX LOG</span>
+        <span className="panel-label">COMMS LOG</span>
         <span className="text-[10px] tracking-widest text-muted-foreground">
           {entries.length} PACKETS
         </span>
@@ -42,8 +43,8 @@ export function TerminalLog({ entries }: Props) {
           entries.map((e) => (
             <div key={e.id} className="flex gap-3">
               <span className="text-muted-foreground">{fmt(e.ts)}</span>
-              <span style={{ color: e.ok ? "var(--foreground)" : "var(--alert)" }}>
-                {e.ok ? "TX" : "DROP"}
+              <span style={{ color: e.type === "RX" ? "var(--muted-foreground)" : e.type === "AUTO_RX" ? "#00ffff" : e.ok ? "var(--foreground)" : "var(--alert)" }}>
+                {e.type === "RX" ? "RX" : e.type === "AUTO_RX" ? "AUTO" : e.ok ? "TX" : "DROP"}
               </span>
               <span className="truncate">{e.payload}</span>
             </div>

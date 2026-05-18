@@ -12,6 +12,7 @@ export interface LastSent {
 export function useWebSocket(ip: string) {
   const [connectionStatus, setConnectionStatus] = useState<ConnectionStatus>("DISCONNECTED");
   const [lastSent, setLastSent] = useState<LastSent | null>(null);
+  const [lastReceived, setLastReceived] = useState<LastSent | null>(null);
   const ws = useRef<WebSocket | null>(null);
   const { setBattery } = useStore();
 
@@ -39,7 +40,9 @@ export function useWebSocket(ip: string) {
 
       ws.current.onmessage = (event) => {
         try {
-          const message = JSON.parse(event.data);
+          const payload = event.data;
+          setLastReceived({ ts: Date.now(), payload });
+          const message = JSON.parse(payload);
           if (message.status === "low_battery" || message.battery) {
             const level = message.level || message.battery;
             setBattery(level);
@@ -89,5 +92,5 @@ export function useWebSocket(ip: string) {
     []
   );
 
-  return { sendMessage, connectionStatus, lastSent };
+  return { sendMessage, connectionStatus, lastSent, lastReceived };
 }

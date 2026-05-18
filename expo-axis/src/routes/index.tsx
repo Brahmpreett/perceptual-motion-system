@@ -41,11 +41,13 @@ function Dashboard() {
     if (typeof window === "undefined") return "192.168.1.10";
     return localStorage.getItem("axis.ip") || "192.168.1.10";
   });
+  const [autoMode, setAutoMode] = useState(false);
+  const [cameraPower, setCameraPower] = useState(true);
   useEffect(() => {
     if (typeof window !== "undefined") localStorage.setItem("axis.ip", ip);
   }, [ip]);
 
-  const { sendMessage, connectionStatus, lastSent } = useWebSocket(ip);
+  const { sendMessage, connectionStatus, lastSent, lastReceived } = useWebSocket(ip);
 
   // Log everything we try to send
   const [log, setLog] = useState<LogEntry[]>([]);
@@ -62,11 +64,37 @@ function Dashboard() {
           ts: lastSent.ts,
           payload: lastSent.payload,
           ok: connectionStatus === "CONNECTED",
+          type: "TX" as const,
         },
       ].slice(-200),
     );
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [lastSent]);
+
+  useEffect(() => {
+    if (!lastReceived) return;
+    idRef.current += 1;
+    const id = idRef.current;
+    
+    let type: LogEntry["type"] = "RX";
+    try {
+       const parsed = JSON.parse(lastReceived.payload);
+       if (parsed.type === "AUTO_RX") type = "AUTO_RX";
+    } catch(e) {}
+
+    setLog((prev) =>
+      [
+        ...prev,
+        {
+          id,
+          ts: lastReceived.ts,
+          payload: lastReceived.payload,
+          ok: true,
+          type,
+        },
+      ].slice(-200),
+    );
+  }, [lastReceived]);
 
   // Throttled joystick emission
   const lastCamRef = useRef(0);
@@ -115,34 +143,61 @@ function Dashboard() {
     [sendMessage],
   );
 
+  const onToggleAuto = useCallback(() => {
+    setAutoMode((prev) => {
+      const next = !prev;
+      sendMessage(JSON.stringify({ action: "set_autonomous", enabled: next }));
+      return next;
+    });
+  }, [sendMessage]);
+
+  const onToggleCamera = useCallback(() => {
+    setCameraPower((prev) => {
+      const next = !prev;
+      sendMessage(JSON.stringify({ action: "set_camera_power", enabled: next }));
+      if (!next && autoMode) {
+        // Turn off auto mode if camera turns off
+        setAutoMode(false);
+        sendMessage(JSON.stringify({ action: "set_autonomous", enabled: false }));
+      }
+      return next;
+    });
+  }, [sendMessage, autoMode]);
+
   return (
     <main className="min-h-screen w-full p-3 lg:p-4 flex flex-col gap-3 lg:gap-4">
       <Header ip={ip} onIpChange={setIp} status={connectionStatus} />
 
       <div className="grid flex-1 gap-3 lg:gap-4 grid-cols-1 lg:grid-cols-[260px_1fr_260px]">
-        {/* LEFT: Joystick */}
+        {/* LEFT: D-Pad + E-stop */}
+        <aside className="panel fade-in flex flex-col gap-4 p-4">
+          <DPad onMove={onMove} onStop={onStop} onEstop={onEstop} />
+        </aside>
+
+        {/* CENTER: Video */}
+        <div className="flex flex-col gap-3 lg:gap-4 min-h-[320px] lg:min-h-0">
+          <VideoFeed 
+            ip={ip} 
+            autoMode={autoMode} 
+            onToggleAuto={onToggleAuto}
+            cameraPower={cameraPower}
+            onToggleCamera={onToggleCamera} 
+          />
+        </div>
+
+        {/* RIGHT: Joystick */}
         <aside className="panel fade-in flex flex-col items-center justify-between gap-4 p-4">
           <Joystick onChange={onCamera} />
           <div className="w-full grid grid-cols-2 gap-2 text-[10px] tracking-widest text-muted-foreground">
             <div className="border p-2" style={{ borderColor: "var(--border)" }}>
               <div className="panel-label">MODE</div>
-              <div className="text-foreground mt-1">MANUAL</div>
+              <div className="text-foreground mt-1">{autoMode ? "AUTO" : "MANUAL"}</div>
             </div>
             <div className="border p-2" style={{ borderColor: "var(--border)" }}>
               <div className="panel-label">GIMBAL</div>
               <div className="text-foreground mt-1">ARMED</div>
             </div>
           </div>
-        </aside>
-
-        {/* CENTER: Video */}
-        <div className="flex flex-col gap-3 lg:gap-4 min-h-[320px] lg:min-h-0">
-          <VideoFeed ip={ip} />
-        </div>
-
-        {/* RIGHT: D-Pad + E-stop */}
-        <aside className="panel fade-in flex flex-col gap-4 p-4">
-          <DPad onMove={onMove} onStop={onStop} onEstop={onEstop} />
         </aside>
       </div>
 
