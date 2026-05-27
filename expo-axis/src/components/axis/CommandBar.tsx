@@ -1,4 +1,4 @@
-import { useState, useEffect } from "react";
+import { useState } from "react";
 import { useSpeechRecognition } from "../../hooks/useSpeechRecognition";
 
 interface Props {

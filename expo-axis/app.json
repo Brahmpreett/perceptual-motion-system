@@ -1,0 +1,16 @@
+{
+  "expo": {
+    "name": "AXIS",
+    "slug": "expo-axis",
+    "version": "0.1.0",
+    "orientation": "landscape",
+    "userInterfaceStyle": "dark",
+    "assetBundlePatterns": [
+      "**/*"
+    ],
+    "plugins": [
+      "expo-font",
+      "expo-camera"
+    ]
+  }
+}

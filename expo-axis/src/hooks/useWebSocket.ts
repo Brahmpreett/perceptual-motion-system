@@ -24,7 +24,7 @@ export function useWebSocket(ip: string) {
 
     const connect = () => {
       setConnectionStatus("CONNECTING");
-      const url = `ws://${ip}:8000/ws`;
+      const url = `ws://${ip}:8765/ws`;
 
       try {
         ws.current = new WebSocket(url);

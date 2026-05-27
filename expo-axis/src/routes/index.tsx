@@ -80,7 +80,9 @@ function Dashboard() {
     try {
        const parsed = JSON.parse(lastReceived.payload);
        if (parsed.type === "AUTO_RX") type = "AUTO_RX";
-    } catch(e) {}
+    } catch {
+      type = "RX";
+    }
 
     setLog((prev) =>
       [
